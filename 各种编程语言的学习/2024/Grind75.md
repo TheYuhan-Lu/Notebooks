@@ -48,6 +48,12 @@ class Solution:
 
 ### Leetcode 21 [Merge Two Sorted Lists](https://leetcode.com/problems/merge-two-sorted-lists/) (Linked List)
 
+You are given the heads of two sorted linked lists `list1` and `list2`.
+
+Merge the two lists into one **sorted** list. The list should be made by splicing together the nodes of the first two lists.
+
+Return *the head of the merged linked list*.
+
 #### Solution1 - my own solution
 
 ```python
@@ -97,6 +103,12 @@ class Solution:
 ```
 
 ### LeetCode 121 [Best Time to Buy and Sell Stock](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/) (Array)
+
+You are given an array `prices` where `prices[i]` is the price of a given stock on the `ith`day.
+
+You want to maximize your profit by choosing a **single day** to buy one stock and choosing a **different day in the future** to sell that stock.
+
+Return *the maximum profit you can achieve from this transaction*. If you cannot achieve any profit, return `0`.
 
 #### Solution 1 - out of time limited
 
@@ -878,4 +890,140 @@ class MyQueue:
 # param_3 = obj.peek()
 # param_4 = obj.empty()
 ```
+
+
+
+### LeetCode [67. Add Binary](https://leetcode.com/problems/add-binary/)
+
+> [!NOTE]
+>
+> ```python
+> "".join(s[::-1]) # join string array continuly
+> 	#s[::-1] means reverse the array 's'
+> ```
+>
+> ```python
+> val += int(a[i]) if i < len(a) else 0 # the if syntax
+> ```
+>
+> ```python
+> a_int = int(a,2) #transfer the string from 2-
+> ```
+>
+> 
+
+Given two binary strings `a` and `b`, return *their sum as a binary string*.
+
+**Example 1:**
+
+```
+Input: a = "11", b = "1"
+Output: "100"
+```
+
+```python
+#my solution-- use the functions of python itself
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        a_int,b_int = int(a,2),int(b,2)
+        c_int = a_int + b_int
+        return str(bin(c_int)[2:])
+
+
+# General Solution
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        a = a[::-1]
+        b = b[::-1]
+
+        s = []
+
+        carry = 0
+        i = 0
+
+        while i < max(len(a),len(b)) or carry >0:
+            val = carry
+            val += int(a[i]) if i < len(a) else 0
+            val += int(b[i]) if i < len(b) else 0
+            s.append(str(val%2))
+            carry = val//2
+            i += 1
+
+        return "".join(s[::-1])
+
+
+```
+
+
+
+### LeetCode [383. Ransom Note](https://leetcode.com/problems/ransom-note/) Hash Table
+
+Given two strings `ransomNote` and `magazine`, return `true` *if* `ransomNote` *can be constructed by using the letters from* `magazine` *and* `false` *otherwise*.
+
+Each letter in `magazine` can only be used once in `ransomNote`.
+
+```python
+class Solution:
+    def canConstruct(self, ransomNote: str, magazine: str) -> bool:
+        d = defaultdict(int)
+
+        for c in magazine:
+            d[c]+=1
+
+        for c in ransomNote:
+            if c in d and d[c] !=0:
+                d[c] -=1
+            else:
+                return False
+
+
+        return True
+                        
+```
+
+
+
+### LeetCode [278. First Bad Version](https://leetcode.com/problems/first-bad-version/) Binary Search
+
+> [!NOTE]
+>
+> - Time complexity: **O(log N)**
+> - Space complexity: **O(1)**
+
+You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest version of your product fails the quality check. Since each version is developed based on the previous version, all the versions after a bad version are also bad.
+
+Suppose you have `n` versions `[1, 2, ..., n]` and you want to find out the first bad one, which causes all the following ones to be bad.
+
+You are given an API `bool isBadVersion(version)` which returns whether `version` is bad. Implement a function to find the first bad version. You should minimize the number of calls to the API.
+
+```python
+# The isBadVersion API is already defined for you.
+# def isBadVersion(version: int) -> bool:
+
+class Solution:
+    def firstBadVersion(self, n: int) -> int:
+        left,right = 1,n
+        
+        while left <= right:
+            mid = (left + right )//2
+            if isBadVersion(mid) == False:
+                left = mid + 1  #同样，这里的+1和-1很重要，能够最大化的省事
+            else:
+                right = mid - 1
+
+        return left
+        
+```
+
+
+
+### LeetCode[39. Combination Sum](https://leetcode.com/problems/combination-sum/)
+
+[回溯算法解决排列、组合、子集问题](https://labuladong.online/algo/essential-technique/permutation-combination-subset-all-in-one/)
+
+Given an array of **distinct** integers `candidates` and a target integer `target`, return *a list of all **unique combinations** of* `candidates` *where the chosen numbers sum to* `target`*.* You may return the combinations in **any order**.
+
+The **same** number may be chosen from `candidates` an **unlimited number of times**. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
+
+The test cases are generated such that the number of unique combinations that sum up to `target` is less than `150` combinations for the given input.
 
